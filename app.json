@@ -1,42 +1,31 @@
 {
   "expo": {
-    "name": "BibleJourney",
-    "slug": "BibleJourney",
+    "name": "Bible Journey",
+    "slug": "bible-journey",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "biblejourney",
+    "icon": "./assets/TBJA2.png",
     "userInterfaceStyle": "automatic",
+    "scheme": "biblejourney",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "bundleIdentifier": "com.kuyaceds.biblejourney",
+      "supportsTablet": true
     },
     "android": {
+      "package": "com.kuyaceds_03.biblejourney",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
-      "predictiveBackGestureEnabled": false
-    },
-    "web": {
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+        "foregroundImage": "./assets/TBJA2.png",
+        "backgroundColor": "#080B18"
+      }
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
-        }
-      ]
+      "expo-notifications"
     ],
-    "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
-    }
+    "extra": {
+      "eas": {
+        "projectId": "d464ac11-ee15-4746-acf0-e8c4262140aa"
+      }
+    },
+    "owner": "kuyaceds_03"
   }
 }
