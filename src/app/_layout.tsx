@@ -12,10 +12,18 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+
 import SplashScreen from "../components/SplashScreen";
 import { ThemeProvider, useTheme } from "../theme/ThemeContext";
 
 const ONBOARDING_COMPLETED_KEY = "onboardingCompleted";
+
+/*
+ * Prevents the splash screen from appearing again
+ * when the Expo Router layout is remounted during
+ * the same app session.
+ */
+let hasShownSplash = false;
 
 function HapticTabButton(props: any) {
   const { onPress, ...rest } = props;
@@ -113,22 +121,29 @@ function MainTabs() {
       <Tabs
         screenOptions={{
           headerShown: false,
+
           tabBarStyle,
+
           tabBarBackground: () => <TabBarBackground />,
+
           tabBarActiveTintColor: fontColor,
+
           tabBarInactiveTintColor: isNight
             ? "rgba(255,255,255,0.42)"
             : "rgba(24,24,24,0.42)",
+
           tabBarLabelStyle: {
             fontSize: 10,
             fontWeight: "700",
             marginBottom: Platform.OS === "ios" ? 0 : 2,
           },
+
           tabBarItemStyle: {
             paddingTop: 4,
           },
         }}
       >
+        {/* HOME */}
         <Tabs.Screen
           name="index"
           options={{
@@ -144,6 +159,7 @@ function MainTabs() {
           }}
         />
 
+        {/* BIBLE */}
         <Tabs.Screen
           name="bible"
           options={{
@@ -159,6 +175,7 @@ function MainTabs() {
           }}
         />
 
+        {/* DASHBOARD */}
         <Tabs.Screen
           name="calendar"
           options={{
@@ -174,6 +191,7 @@ function MainTabs() {
           }}
         />
 
+        {/* SETTINGS */}
         <Tabs.Screen
           name="settings"
           options={{
@@ -189,11 +207,14 @@ function MainTabs() {
           }}
         />
 
+        {/* HIDDEN ROUTES */}
         <Tabs.Screen
           name="onboarding"
           options={{
             href: null,
-            tabBarStyle: { display: "none" },
+            tabBarStyle: {
+              display: "none",
+            },
           }}
         />
 
@@ -201,7 +222,9 @@ function MainTabs() {
           name="reading"
           options={{
             href: null,
-            tabBarStyle: { display: "none" },
+            tabBarStyle: {
+              display: "none",
+            },
           }}
         />
 
@@ -209,7 +232,9 @@ function MainTabs() {
           name="about"
           options={{
             href: null,
-            tabBarStyle: { display: "none" },
+            tabBarStyle: {
+              display: "none",
+            },
           }}
         />
 
@@ -217,7 +242,9 @@ function MainTabs() {
           name="explore"
           options={{
             href: null,
-            tabBarStyle: { display: "none" },
+            tabBarStyle: {
+              display: "none",
+            },
           }}
         />
       </Tabs>
@@ -226,9 +253,14 @@ function MainTabs() {
 }
 
 function AppNavigator() {
-  const [splashVisible, setSplashVisible] = useState(true);
+  /*
+   * The splash is shown only if it has not already
+   * completed during this JavaScript session.
+   */
+  const [splashVisible, setSplashVisible] = useState(!hasShownSplash);
 
   const finishSplash = useCallback(() => {
+    hasShownSplash = true;
     setSplashVisible(false);
   }, []);
 
@@ -237,7 +269,11 @@ function AppNavigator() {
       <View style={styles.appRoot}>
         <MainTabs />
 
-        {splashVisible && <SplashScreen onFinished={finishSplash} />}
+        {splashVisible && (
+          <View pointerEvents="auto" style={styles.splashOverlay}>
+            <SplashScreen onFinished={finishSplash} />
+          </View>
+        )}
       </View>
     </ThemeProvider>
   );
@@ -253,32 +289,49 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
 
+  splashOverlay: {
+    ...StyleSheet.absoluteFill,
+    zIndex: 9999,
+    elevation: 9999,
+  },
+
   tabBar: {
     position: "absolute",
+
     left: 12,
     right: 12,
     bottom: 10,
+
     height: 72,
+
     borderRadius: 24,
+
     borderTopWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
+
     overflow: "hidden",
+
     paddingTop: 5,
     paddingBottom: 5,
+
     shadowRadius: 18,
+
     shadowOffset: {
       width: 0,
       height: 8,
     },
+
     elevation: 8,
   },
 
   reflection: {
     position: "absolute",
+
     top: 0,
     left: 18,
     right: 18,
+
     height: 1,
   },
 });
