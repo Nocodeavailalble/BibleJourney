@@ -1,0 +1,25 @@
+{
+  "name": "Bible Journey",
+  "short_name": "Bible Journey",
+  "description": "A Bible reading and memorization journey.",
+  "start_url": "/BibleJourney/",
+  "scope": "/BibleJourney/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#080B18",
+  "background_color": "#080B18",
+  "icons": [
+    {
+      "src": "/BibleJourney/bible-journey-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/BibleJourney/bible-journey-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
