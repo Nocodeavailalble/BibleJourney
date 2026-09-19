@@ -7,10 +7,12 @@
     "icon": "./assets/TBJA2.png",
     "userInterfaceStyle": "automatic",
     "scheme": "biblejourney",
+
     "ios": {
       "bundleIdentifier": "com.kuyaceds.biblejourney",
       "supportsTablet": true
     },
+
     "android": {
       "package": "com.kuyaceds_03.biblejourney",
       "adaptiveIcon": {
@@ -18,14 +20,25 @@
         "backgroundColor": "#080B18"
       }
     },
-    "plugins": [
-      "expo-notifications"
-    ],
+
+    "web": {
+      "output": "static",
+      "name": "Bible Journey",
+      "shortName": "Bible Journey"
+    },
+
+    "experiments": {
+      "baseUrl": "/BibleJourney"
+    },
+
+    "plugins": ["expo-notifications", "expo-font"],
+
     "extra": {
       "eas": {
-        "projectId": "d464ac11-ee15-4746-acf0-e8c4262140aa"
+        "projectId": "d464ac11-ee15-4746-afc0-e8c4262140aa"
       }
     },
+
     "owner": "kuyaceds_03"
   }
 }

@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
+import * as Font from "expo-font";
 import * as Haptics from "expo-haptics";
 import { Tabs, router, useSegments } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -18,11 +19,6 @@ import { ThemeProvider, useTheme } from "../theme/ThemeContext";
 
 const ONBOARDING_COMPLETED_KEY = "onboardingCompleted";
 
-/*
- * Prevents the splash screen from appearing again
- * when the Expo Router layout is remounted during
- * the same app session.
- */
 let hasShownSplash = false;
 
 function HapticTabButton(props: any) {
@@ -143,12 +139,13 @@ function MainTabs() {
           },
         }}
       >
-        {/* HOME */}
         <Tabs.Screen
           name="index"
           options={{
             title: "Home",
+
             tabBarButton: (props) => <HapticTabButton {...props} />,
+
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="home-outline"
@@ -159,12 +156,13 @@ function MainTabs() {
           }}
         />
 
-        {/* BIBLE */}
         <Tabs.Screen
           name="bible"
           options={{
             title: "Bible",
+
             tabBarButton: (props) => <HapticTabButton {...props} />,
+
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="book-open-page-variant"
@@ -175,12 +173,13 @@ function MainTabs() {
           }}
         />
 
-        {/* DASHBOARD */}
         <Tabs.Screen
           name="calendar"
           options={{
             title: "Dashboard",
+
             tabBarButton: (props) => <HapticTabButton {...props} />,
+
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="calendar-month-outline"
@@ -191,12 +190,13 @@ function MainTabs() {
           }}
         />
 
-        {/* SETTINGS */}
         <Tabs.Screen
           name="settings"
           options={{
             title: "Settings",
+
             tabBarButton: (props) => <HapticTabButton {...props} />,
+
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="cog-outline"
@@ -207,14 +207,11 @@ function MainTabs() {
           }}
         />
 
-        {/* HIDDEN ROUTES */}
         <Tabs.Screen
           name="onboarding"
           options={{
             href: null,
-            tabBarStyle: {
-              display: "none",
-            },
+            tabBarStyle: { display: "none" },
           }}
         />
 
@@ -222,9 +219,7 @@ function MainTabs() {
           name="reading"
           options={{
             href: null,
-            tabBarStyle: {
-              display: "none",
-            },
+            tabBarStyle: { display: "none" },
           }}
         />
 
@@ -232,9 +227,7 @@ function MainTabs() {
           name="about"
           options={{
             href: null,
-            tabBarStyle: {
-              display: "none",
-            },
+            tabBarStyle: { display: "none" },
           }}
         />
 
@@ -242,9 +235,7 @@ function MainTabs() {
           name="explore"
           options={{
             href: null,
-            tabBarStyle: {
-              display: "none",
-            },
+            tabBarStyle: { display: "none" },
           }}
         />
       </Tabs>
@@ -253,16 +244,52 @@ function MainTabs() {
 }
 
 function AppNavigator() {
-  /*
-   * The splash is shown only if it has not already
-   * completed during this JavaScript session.
-   */
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
   const [splashVisible, setSplashVisible] = useState(!hasShownSplash);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadIconFont() {
+      try {
+        await Font.loadAsync({
+          "material-community": require("../../assets/MaterialCommunityIcons.ttf"),
+        });
+
+        if (mounted) {
+          setFontsLoaded(true);
+        }
+      } catch (error) {
+        console.error("Failed to load MaterialCommunityIcons font:", error);
+
+        if (mounted) {
+          setFontsLoaded(true);
+        }
+      }
+    }
+
+    void loadIconFont();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const finishSplash = useCallback(() => {
     hasShownSplash = true;
     setSplashVisible(false);
   }, []);
+
+  if (!fontsLoaded) {
+    return (
+      <ThemeProvider>
+        <View style={styles.appRoot}>
+          <SplashScreen onFinished={() => {}} />
+        </View>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider>
@@ -297,41 +324,30 @@ const styles = StyleSheet.create({
 
   tabBar: {
     position: "absolute",
-
     left: 12,
     right: 12,
     bottom: 10,
-
     height: 72,
-
     borderRadius: 24,
-
     borderTopWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
-
     overflow: "hidden",
-
     paddingTop: 5,
     paddingBottom: 5,
-
     shadowRadius: 18,
-
     shadowOffset: {
       width: 0,
       height: 8,
     },
-
     elevation: 8,
   },
 
   reflection: {
     position: "absolute",
-
     top: 0,
     left: 18,
     right: 18,
-
     height: 1,
   },
 });
